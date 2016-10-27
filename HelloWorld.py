@@ -2,6 +2,7 @@ __author__ = 'bigdata'
 import re
 import nltk
 import pandas
+import numpy
 #To be able to read csv formated files, we will first have to import the
 #csv module.import csv
 #print "the methods of package re which is used for regular expressions"
@@ -16,216 +17,17 @@ import pandas
 
 
 #with open('/home/bigdata/data/carehome.csv', 'rb') as f:
-   #reader = csv.reader(f)
-   #for row in reader:
-       #print row
+  # reader = csv.reader(f)
+  # for row in reader:
+      # print row
 
 #read csv with pandas module
 
 #chomes = pandas.read_csv('/home/bigdata/data/carehome.csv')
 
-chomes = pandas.read_csv('/home/bigdata/data/small.csv')
-
+chomes = pandas.read_csv('/home/bigdata/data/carehome.csv', sep=",")
+chomes = chomes.head(200)
 #print (chomes)
-
-text = 'Group: South Tyneside Metropolitan Borough Council Person in charge: Dawn Hill (Manager) Local Authority / Social Services: South Tyneside Metropolitan Borough Council (click for contact details) Type of Service: Care Home only (Residential Care) \xe2\x80\x93 Local Authority Owned  30 residents Registered Care Categories*: Mental Health Condition \xe2\x80\xa2 Old Age \xe2\x80\xa2 Physical Disability \xe2\x80\xa2 Sensory Impairment Specialist Care Categories: Hearing Impairment & Deafness \xe2\x80\xa2 Speech Impairment Single Rooms: 30 Rooms with ensuite WC: 1 Latest CQC* Report on Perth Green House: click here * Care Quality Commission (CQC) is responsible for the registration and inspection of social care services in England.'
-print (text)
-
-address = 'Charmouth Road Lyme Regis DT7 3HH '
-
-#Postcode
-postcode = re.search(r'[A-Z][A-Z][0-9]+\s[0-9][A-Z][A-Z]\s', address, flags=0)
-postcode = str(postcode.group())
-print postcode
-
-#City
-city = re.search(r'\s[A-Z][^-]+[A-Z][A-Z][0-9]+\s[0-9][A-Z][A-Z]\s', address, flags=0)
-city = str(city.group())
-print city
-
-#Single Rooms
-srooms = re.search(r'Rooms:\s[0-9][0-9]', text, flags=0)
-sroom=str(srooms.group())
-print(sroom)
-
-sroomsno = re.sub(r'Rooms:\s', '', sroom)
-print(sroomsno)
-
-#Ensuite Rooms
-erooms = re.search(r'ensuite\sWC:\s[0-9]+', text, flags=0)
-eroom=str(erooms.group())
-print(eroom)
-
-eroomsno = re.sub(r'ensuite\sWC:\s', '', eroom)
-print(eroomsno)
-
-#Ages Accepted
-ages = str(re.search(r'Ages[0-9][0-9]\+', text, flags=0))
-if ages <> 'None':
-    print str(ages.group())
-else :
-    print 'All Ages'
-
-#Support Types
-support = re.search(r'Registered\sCare\sCategories[^-]+Single', text, flags=0)
-supportTypes = str(support.group())
-print(supportTypes)
-
-support = re.sub(r'Single','', supportTypes)
-print(support)
-
-support = re.sub(r'\xe2\x80\xa2', '-', support)
-print(support)
-
-alcoholDependence = 0
-if str(re.search(r'Alcohol\sDependence', support, flags=0)) <> 'None' :
-    alcoholDependence = 1
-print 'Alcohol Dependence:',alcoholDependence
-
-alzheimers = 0
-if str(re.search(r'Alzheimer.s', support, flags=0)) <> 'None' :
-    alzheimers = 1
-print 'Alzheimer\'s:',alzheimers
-
-anorexia = 0
-if str(re.search(r'Anorexia/Bulimia/Self\sHarming', support, flags=0)) <> 'None' :
-    anorexia = 1
-print 'Anorexia/Bulimia/Self Harming:',anorexia
-
-bipolar = 0
-if str(re.search(r'Bipolar/Manic\sDepression', support, flags=0)) <> 'None' :
-    bipolar= 1
-print 'Bipolar/Manic Depression:',bipolar
-
-cancerCare = 0
-if str(re.search(r'Cancer\sCare', support, flags=0)) <> 'None' :
-    cancerCare = 1
-print 'Cancer Care:',cancerCare
-
-cerebralPalsy = 0
-if str(re.search(r'Cerebral\sPalsy', support, flags=0)) <> 'None' :
-    cerebralPalsy = 1
-print 'Cerebral Palsy', cerebralPalsy
-
-challengingBehaviour= 0
-if str(re.search(r'Challenging\sBehaviour', support, flags=0)) <> 'None' :
-    sensoryDisorder = 1
-print 'Challenging Behaviour', challengingBehaviour
-
-colitis = 0
-if str(re.search(r'Colitis\s&\sCrohn\'s\sDisease', support, flags=0)) <> 'None' :
-    colitis = 1
-print 'Colitis & Crohn\'s Disease', colitis
-
-dementia = 0
-if str(re.search(r'Dementia', support, flags=0)) <> 'None' :
-    dementia = 1
-print 'Dementia:',dementia
-
-downSyndrome = 0
-if str(re.search(r'Down\sSyndrome', support, flags=0)) <> 'None' :
-    downSyndrome = 1
-print 'Down Syndrome:',downSyndrome
-
-drugDependence = 0
-if str(re.search(r'Drug\sDependence', support, flags=0)) <> 'None' :
-    drugDependence = 1
-print 'Dementia:',drugDependence
-
-eatingDisorder = 0
-if str(re.search(r'Eating\sDisorder', support, flags=0)) <> 'None' :
-    eatingDisorder = 1
-print 'Eating Disorder:',eatingDisorder
-
-epilepsy = 0
-if str(re.search(r'Epilepsy', support, flags=0)) <> 'None' :
-    epilepsy = 1
-print 'Epilepsy', epilepsy
-
-headInjury = 0
-if str(re.search(r'Head/Brain\sInjury', support, flags=0)) <> 'None' :
-    headInjury = 1
-print 'Head/Brain Injury:',headInjury
-
-hearingImpairment = 0
-if str(re.search(r'Hearing\sImpairment', support, flags=0)) <> 'None' :
-    hearingImpairment = 1
-print 'Hearing Impairment & Deafness:',hearingImpairment
-
-huntingtonsDisease= 0
-if str(re.search(r'Huntington\'s\sDisease', support, flags=0)) <> 'None' :
-    huntingtonsDisease = 1
-print 'Huntington\'s Disease', huntingtonsDisease
-
-learningDisability = 0
-if str(re.search(r'Learning\sDisability', support, flags=0)) <> 'None' :
-    learningDisability = 1
-print 'Learning Disability:',learningDisability
-
-mentalHealthCondition = 0
-if str(re.search(r'Mental\sHealth\sCondition', support, flags=0)) <> 'None' :
-    mentalHealthCondition = 1
-print 'Mental Health Condition', mentalHealthCondition
-
-motorNeuronDisease = 0
-if str(re.search(r'Motor\sNeuron\Disease', support, flags=0)) <> 'None' :
-    motorNeuronDisease = 1
-print 'Motor Neuron Disease', motorNeuronDisease
-
-multipleSclerosis = 0
-if str(re.search(r'Multiple\sSclerosis', support, flags=0)) <> 'None' :
-    multipleSclerosis = 1
-print 'Multiple Sclerosis:',multipleSclerosis
-
-muscularDystrophy = 0
-if str(re.search(r'Muscular\sDystrophy', support, flags=0)) <> 'None' :
-    muscularDystrophy = 1
-print 'Muscular Dystrophy:',muscularDystrophy
-
-oldAge = 0
-if str(re.search(r'Old\sAge', support, flags=0)) <> 'None' :
-    oldAge = 1
-print 'Old Age:',oldAge
-
-orthopaedic = 0
-if str(re.search(r'Orthopaedic', support, flags=0)) <> 'None' :
-    orthopaedic = 1
-print 'Orthopaedic:',orthopaedic
-
-parkinsonsDisease = 0
-if str(re.search(r'Parkinson\'s\sDisease', support, flags=0)) <> 'None' :
-    parkinsonsDisease = 1
-print 'Parkinson\'s Disease:',parkinsonsDisease
-
-physicalDisability = 0
-if str(re.search(r'Physical\sDisability', support, flags=0)) <> 'None' :
-    physicalDisability = 1
-print 'Physical Disability:',physicalDisability
-
-schizophrenia = 0
-if str(re.search(r'Schizophrenia', support, flags=0)) <> 'None' :
-    schizophrenia = 1
-print 'Schizophrenia:',schizophrenia
-
-sensoryImpairment = 0
-if str(re.search(r'Sensory\sImpairment\s[^S]', support, flags=0)) <> 'None' :
-    sensoryImpairment = 1
-print 'Sensory Impairment:',sensoryImpairment
-
-speechImpairment = 0
-if str(re.search(r'Speech\sImpairment', support, flags=0)) <> 'None' :
-    speechImpairment = 1
-print 'Speech Impairment:', speechImpairment
-
-stroke = 0
-if str(re.search(r'Stroke', support, flags=0)) <> 'None' :
-    stroke = 1
-print 'Stroke:',stroke
-
-substanceMisuse = 0
-if str(re.search(r'Substance\sMisuse', support, flags=0)) <> 'None' :
-   substanceMisuse = 1
-print 'Substance Misuse:',substanceMisuse
 
 #Delete uneccessary columns
 del chomes['_source']
@@ -240,11 +42,369 @@ chomes['Address'] = chomes['address'].astype('str')
 chomes['Information'] = chomes['info'].astype('str')
 
 #Remove original columns
-del chomes['_num']
-del chomes['address']
-del chomes['info']
+chomes = chomes.drop(['_num','address','info'], axis=1)
 
-print(chomes.dtypes)
-print(chomes)
+text = 'Group: South Tyneside Metropolitan Borough Council Person in charge: Dawn Hill (Manager) Local Authority / Social Services: South Tyneside Metropolitan Borough Council (click for contact details) Type of Service: Care Home only (Residential Care) \xe2\x80\x93 Local Authority Owned  30 residents Registered Care Categories*: Mental Health Condition \xe2\x80\xa2 Old Age \xe2\x80\xa2 Physical Disability \xe2\x80\xa2 Sensory Impairment Specialist Care Categories: Hearing Impairment & Deafness \xe2\x80\xa2 Speech Impairment Single Rooms: 30 Rooms with ensuite WC: 1 Latest CQC* Report on Perth Green House: click here * Care Quality Commission (CQC) is responsible for the registration and inspection of social care services in England.'
+print (text)
+
+text = 'Group: South Tyneside Metropolitan Borough Council Person in charge: Dawn Hill (Manager) Local Authority / Social Services: South Tyneside Metropolitan Borough Council (click for contact details) Type of Service: Care Home only (Residential Care) \xe2\x80\x93 Local Authority Owned  30 residents Registered Care Categories*: Mental Health Condition \xe2\x80\xa2 Old Age \xe2\x80\xa2 Physical Disability \xe2\x80\xa2 Sensory Impairment Specialist Care Categories: Hearing Impairment & Deafness \xe2\x80\xa2 Speech Impairment Single Rooms: monkey Rooms with ensuite WC: 1 Latest CQC* Report on Perth Green House: click here * Care Quality Commission (CQC) is responsible for the registration and inspection of social care services in England.'
+print (text)
 
 
+address = 'Charmouth Road Lyme Regis DT7 3HH '
+
+
+#Postcode
+chomes['postcode']= chomes['Address'].apply(lambda x:x[-8:])
+print(chomes['postcode'])
+print (chomes['Address'])
+
+
+#     #City
+#     city = re.search(r'\s[A-Z][^-]+[A-Z][A-Z][0-9]+\s[0-9][A-Z][A-Z]\s', address, flags=0)
+#     city = str(city.group())
+#     print city
+#     chomes['City'] = city
+#
+
+#Single Rooms
+def getRooms(chomes):
+     srooms = re.search(r'Rooms:\s[0-9][0-9]', chomes, flags=0)
+     if srooms is None:
+        sroomsno = ' '
+     else:
+         sroom = str(srooms.group())
+         sroomsno = re.sub(r'Rooms:\s', '', sroom)
+     return pandas.Series(dict(rooms = sroomsno))
+
+chomes['Single Rooms'] = (chomes['Information'].apply(lambda x:getRooms(x)))
+
+
+#getEnsuiteRooms
+def getEnsuiteRooms(chomes):
+     erooms = re.search(r'ensuite\sWC:\s[0-9]+', chomes, flags=0)
+     if erooms is None:
+         eroomsno = ' '
+     else:
+         eroom = str(erooms.group())
+         eroomsno = re.sub(r'ensuite\sWC:\s', '', eroom)
+     return pandas.Series(dict(erooms = eroomsno))
+
+chomes['Ensuite Rooms'] = (chomes['Information'].apply(lambda x:getEnsuiteRooms(x)))
+
+#Ages Accepted
+def getAges(chomes):
+     ages = re.search(r'Ages\s[0-9][0-9]\+', chomes, flags=0)
+     if ages is None:
+         ages = 'All Ages'
+     else:
+         ages = str(ages.group())
+     return pandas.Series(dict(ages = ages))
+
+chomes['Ages Accepted'] = (chomes['Information'].apply(lambda x:getAges(x)))
+
+#Support Types
+def getAlcoholDependence(chomes):
+     present = re.search(r'Alcohol\sDependence', chomes, flags=0)
+     if present is None:
+         alcohol = '0'
+     else:
+         alcohol = '1'
+     return pandas.Series(dict(alcohol = alcohol))
+
+chomes['Alcohol Dependence'] = (chomes['Information'].apply(lambda x:getAlcoholDependence(x)))
+
+def getAlzheimers(chomes):
+     present = re.search(r'Alzheimer\'s', chomes, flags=0)
+     if present is None:
+         alzheimers = '0'
+     else:
+         alzheimers = '1'
+     return pandas.Series(dict(alzheimers = alzheimers))
+
+chomes['Alzheimers'] = (chomes['Information'].apply(lambda x:getAlzheimers(x)))
+
+def getAnorexia(chomes):
+     present = re.search(r'Anorexia/Bulimia/Self\sHarming', chomes, flags=0)
+     if present is None:
+         anorexia = '0'
+     else:
+         anorexia = '1'
+     return pandas.Series(dict(anorexia = anorexia))
+
+chomes['Anorexia/Bulimia/Self Harming'] = (chomes['Information'].apply(lambda x:getAnorexia(x)))
+
+def getBipolar(chomes):
+     present = re.search(r'Bipolar/Manic\sDepression', chomes, flags=0)
+     if present is None:
+         bipolar = '0'
+     else:
+         bipolar = '1'
+     return pandas.Series(dict(bipolar = bipolar))
+
+chomes['Bipolar/Manic Depression'] = (chomes['Information'].apply(lambda x:getBipolar(x)))
+
+def getCancerCare(chomes):
+     present = re.search(r'Cancer\sCare', chomes, flags=0)
+     if present is None:
+         cancerCare = '0'
+     else:
+        cancerCare = '1'
+     return pandas.Series(dict(alzheimers = cancerCare))
+
+chomes['Cancer Care'] = (chomes['Information'].apply(lambda x:getCancerCare(x)))
+
+def getcerebralPalsy(chomes):
+     present = re.search(r'Cerebral\sPalsy', chomes, flags=0)
+     if present is None:
+         cerebralPalsy = '0'
+     else:
+         cerebralPalsy = '1'
+     return pandas.Series(dict(cerebralPalsy = cerebralPalsy))
+
+chomes['Cerebral Palsy'] = (chomes['Information'].apply(lambda x:getcerebralPalsy(x)))
+
+def getChallengingBehaviour(chomes):
+     present = re.search(r'Challenging\sBehaviour', chomes, flags=0)
+     if present is None:
+         challengingBehaviour = '0'
+     else:
+         challengingBehaviour = '1'
+     return pandas.Series(dict(challengingBehaviour = challengingBehaviour))
+
+chomes['Challenging Behaviour'] = (chomes['Information'].apply(lambda x:getChallengingBehaviour(x)))
+
+def getColitis(chomes):
+     present = re.search(r'Colitis', chomes, flags=0)
+     if present is None:
+         colitis = '0'
+     else:
+         colitis = '1'
+     return pandas.Series(dict(colitis = colitis))
+
+chomes['Colitis'] = (chomes['Information'].apply(lambda x:getColitis(x)))
+
+def getDementia(chomes):
+     present = re.search(r'Dementia', chomes, flags=0)
+     if present is None:
+         dementia = '0'
+     else:
+         dementia = '1'
+     return pandas.Series(dict(dementia = dementia))
+
+chomes['Dementia'] = (chomes['Information'].apply(lambda x:getDementia(x)))
+
+def getDownSyndrome(chomes):
+     present = re.search(r'Down\sSyndrome', chomes, flags=0)
+     if present is None:
+         downSyndrome = '0'
+     else:
+         downSyndrome = '1'
+     return pandas.Series(dict(downSyndrome = downSyndrome))
+
+chomes['Down Syndrome'] = (chomes['Information'].apply(lambda x:getDownSyndrome(x)))
+
+def getDrugDependence(chomes):
+     present = re.search(r'Drug\sDependence', chomes, flags=0)
+     if present is None:
+         drugDependence = '0'
+     else:
+         drugDependence = '1'
+     return pandas.Series(dict(drugDependence = drugDependence))
+
+chomes['Drug Dependence'] = (chomes['Information'].apply(lambda x:getDrugDependence(x)))
+
+def getEatingDisorder(chomes):
+     present = re.search(r'Eating\sDisorder', chomes, flags=0)
+     if present is None:
+         eatingDisorder = '0'
+     else:
+         eatingDisorder = '1'
+     return pandas.Series(dict(eatingDisorder = eatingDisorder))
+
+chomes['Eating Disorder'] = (chomes['Information'].apply(lambda x:getEatingDisorder(x)))
+
+def getEpilepsy(chomes):
+     present = re.search(r'Epilepsy', chomes, flags=0)
+     if present is None:
+         epilepsy = '0'
+     else:
+         epilepsy = '1'
+     return pandas.Series(dict(epilepsy = epilepsy))
+
+chomes['Epilespy'] = (chomes['Information'].apply(lambda x:getEpilepsy(x)))
+
+def getHeadInjury(chomes):
+     present = re.search(r'Head\sInjury', chomes, flags=0)
+     if present is None:
+         headInjury= '0'
+     else:
+         headInjury = '1'
+     return pandas.Series(dict(headInjury = headInjury))
+
+chomes['Head Injury'] = (chomes['Information'].apply(lambda x:getHeadInjury(x)))
+
+def getHearingImpairment(chomes):
+     present = re.search(r'Hearing\sImpairment', chomes, flags=0)
+     if present is None:
+         hearingImpairment = '0'
+     else:
+         hearingImpairment = '1'
+     return pandas.Series(dict(hearingImpairment = hearingImpairment))
+
+chomes['Hearing Impairment'] = (chomes['Information'].apply(lambda x:getHearingImpairment(x)))
+
+def getHuntingtons(chomes):
+     present = re.search(r'Huntington\'s\sDisease', chomes, flags=0)
+     if present is None:
+         huntingtons = '0'
+     else:
+         huntingtons = '1'
+     return pandas.Series(dict(huntingtons = huntingtons))
+
+chomes['Huntington\'s Disease'] = (chomes['Information'].apply(lambda x:getHuntingtons(x)))
+
+def getLearningDisability(chomes):
+     present = re.search(r'Learning\sDisability', chomes, flags=0)
+     if present is None:
+         learningDisability = '0'
+     else:
+         learningDisability = '1'
+     return pandas.Series(dict(learningDisability = learningDisability))
+
+chomes['Learning Disability'] = (chomes['Information'].apply(lambda x:getLearningDisability(x)))
+
+def getMentalHealthCondition(chomes):
+     present = re.search(r'Mental\sHealth\sCondition', chomes, flags=0)
+     if present is None:
+         mentalHealthCondition = '0'
+     else:
+         mentalHealthCondition = '1'
+     return pandas.Series(dict(mentalHealthCondition = mentalHealthCondition))
+
+chomes['Mental Health Condition'] = (chomes['Information'].apply(lambda x:getMentalHealthCondition(x)))
+
+def getMND(chomes):
+     present = re.search(r'Motor\sNeuron\sDisease', chomes, flags=0)
+     if present is None:
+         MND = '0'
+     else:
+         MND = '1'
+     return pandas.Series(dict(MND = MND))
+
+chomes['Motor Neuron Disease'] = (chomes['Information'].apply(lambda x:getMND(x)))
+
+def getMultipleSclerosis(chomes):
+     present = re.search(r'Multiple\sSclerosis', chomes, flags=0)
+     if present is None:
+         multipleSclerosis = '0'
+     else:
+         multipleSclerosis = '1'
+     return pandas.Series(dict(multipleSclerosis = multipleSclerosis))
+
+chomes['Multiple Sclerosis'] = (chomes['Information'].apply(lambda x:getMultipleSclerosis(x)))
+
+def getMuscularDystrophy(chomes):
+     present = re.search(r'Muscular\sDystrophy', chomes, flags=0)
+     if present is None:
+         muscularDystrophy = '0'
+     else:
+         muscularDystrophy = '1'
+     return pandas.Series(dict(muscularDystrophy = muscularDystrophy))
+
+chomes['Muscular Dystrophy'] = (chomes['Information'].apply(lambda x:getMuscularDystrophy(x)))
+
+def getOldAge(chomes):
+     present = re.search(r'Old\sAge', chomes, flags=0)
+     if present is None:
+         oldAge = '0'
+     else:
+         oldAge = '1'
+     return pandas.Series(dict(oldAge = oldAge))
+
+chomes['Old Age'] = (chomes['Information'].apply(lambda x:getOldAge(x)))
+
+def getOrthopaedic(chomes):
+     present = re.search(r'Eating\sDisorder', chomes, flags=0)
+     if present is None:
+         orthopaedic = '0'
+     else:
+         orthopaedic = '1'
+     return pandas.Series(dict(orthopaedic = orthopaedic))
+
+chomes['Orthopaedic'] = (chomes['Information'].apply(lambda x:getOrthopaedic(x)))
+
+def getParkinsons(chomes):
+     present = re.search(r'Parkinson\'s\sDisease', chomes, flags=0)
+     if present is None:
+         parkinsons = '0'
+     else:
+         parkinsons = '1'
+     return pandas.Series(dict(parkinsons = parkinsons))
+
+chomes['Parkinson\'s Disease'] = (chomes['Information'].apply(lambda x:getParkinsons(x)))
+
+def getPhysicalDisability(chomes):
+     present = re.search(r'Physical\sDisability', chomes, flags=0)
+     if present is None:
+         physicalDisability = '0'
+     else:
+         physicalDisability = '1'
+     return pandas.Series(dict(physicalDisability = physicalDisability))
+
+chomes['Physical Disability'] = (chomes['Information'].apply(lambda x:getPhysicalDisability(x)))
+
+def getSchizophrenia(chomes):
+     present = re.search(r'Schizophrenia', chomes, flags=0)
+     if present is None:
+         schizophrenia = '0'
+     else:
+         schizophrenia = '1'
+     return pandas.Series(dict(schizophrenia = schizophrenia))
+
+chomes['Schizophrenia'] = (chomes['Information'].apply(lambda x:getSchizophrenia(x)))
+
+def getSensoryImpairment(chomes):
+     present = re.search(r'Sensory\sImpairment', chomes, flags=0)
+     if present is None:
+         sensoryImpairment = '0'
+     else:
+         sensoryImpairment = '1'
+     return pandas.Series(dict(sensoryImpairment = sensoryImpairment))
+
+chomes['Sensory Impairment'] = (chomes['Information'].apply(lambda x:getSensoryImpairment(x)))
+
+def getSpeechImpairment(chomes):
+     present = re.search(r'Speech\sImpairment', chomes, flags=0)
+     if present is None:
+         speechImpairment = '0'
+     else:
+         speechImpairment = '1'
+     return pandas.Series(dict(speechImpairment = speechImpairment))
+
+chomes['Speech Impairment'] = (chomes['Information'].apply(lambda x:getSpeechImpairment(x)))
+
+def getStroke(chomes):
+     present = re.search(r'Stroke', chomes, flags=0)
+     if present is None:
+         stroke = '0'
+     else:
+         stroke = '1'
+     return pandas.Series(dict(stroke = stroke))
+
+chomes['Stroke'] = (chomes['Information'].apply(lambda x:getStroke(x)))
+
+def getSubstanceMisuse(chomes):
+     present = re.search(r'Substance\sMisuse', chomes, flags=0)
+     if present is None:
+         substanceMisuse = '0'
+     else:
+         substanceMisuse = '1'
+     return pandas.Series(dict(substanceMisuse = substanceMisuse))
+
+chomes['Substance Misuse'] = (chomes['Information'].apply(lambda x:getSubstanceMisuse(x)))
+
+print chomes
+
+file = open("carehome.txt", "w")
+file.write(str(chomes))
